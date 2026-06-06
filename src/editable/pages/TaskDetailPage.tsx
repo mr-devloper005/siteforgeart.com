@@ -7,7 +7,6 @@ import { buildPostUrl, fetchArticleComments, fetchTaskPostBySlug, fetchTaskPosts
 import { getTaskConfig, SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import type { SitePost } from '@/lib/site-connector'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
-import { getVisualPreset, visualSystem } from '@/editable/theme/visual-system'
 
 export const revalidate = 3
 
@@ -105,8 +104,7 @@ const mapSrcFor = (post: SitePost) => {
 }
 
 export function TaskDetailView({ task, post, related, comments = [] }: { task: TaskKey; post: SitePost; related: SitePost[]; comments?: Array<{ id: string; name: string; comment: string; createdAt: string }> }) {
-  const preset = getVisualPreset(visualSystem.recommendedPreset as any)
-  const detailVars = { '--detail-bg': preset.colors.background, '--detail-text': preset.colors.foreground, '--detail-surface': preset.colors.surface, '--detail-accent': preset.colors.accent } as CSSProperties
+  const detailVars = { '--detail-bg': '#ffffff', '--detail-text': '#171719', '--detail-surface': '#ffffff', '--detail-accent': '#f58652' } as CSSProperties
 
   return (
     <EditableSiteShell>
@@ -223,26 +221,41 @@ function ClassifiedDetail({ post, related }: { post: SitePost; related: SitePost
 function ImageDetail({ post, related }: { post: SitePost; related: SitePost[] }) {
   const images = getImages(post)
   return (
-    <section className="mx-auto max-w-[var(--editable-container)] px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-      <BackLink task="image" />
-      <div className="mt-8 grid gap-8 lg:grid-cols-[0.72fr_1.28fr]">
-        <aside className="rounded-[2.5rem] border border-[var(--editable-border)] bg-white p-7 lg:sticky lg:top-24 lg:self-start">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[var(--detail-text)] px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-[var(--detail-bg)]"><Camera className="h-4 w-4" /> Image story</div>
-          <h1 className="mt-6 text-4xl font-black leading-[0.98] tracking-[-0.07em] sm:text-5xl">{post.title}</h1>
-          <p className="mt-5 text-base leading-8 opacity-70">{summaryText(post)}</p>
+    <>
+      <section className="mk-dark-pattern relative overflow-hidden px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <span className="mk-drift pointer-events-none absolute left-[7%] top-[42%] h-10 w-10 rounded-full border border-[#f58652]" />
+        <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
+          <aside>
+            <BackLink task="image" />
+            <div className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#f58652] px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-white"><Camera className="h-4 w-4" /> Image story</div>
+            <h1 className="mt-6 text-4xl font-black leading-[1.03] tracking-[-0.05em] text-white sm:text-6xl">{post.title}</h1>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-white/62">{summaryText(post) || 'A visual post with gallery media, context, and related creative work.'}</p>
+          </aside>
+          <div className="mk-browser-card mk-float bg-[#202124] p-3 pt-11 shadow-[0_34px_80px_rgba(0,0,0,0.32)]">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-white">
+              <img src={images[0] || '/placeholder.svg?height=900&width=1200'} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="mx-auto grid max-w-[1500px] gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:px-8">
+        <aside className="rounded-[1.5rem] border border-[#eeeeee] bg-white p-7 shadow-[0_20px_50px_rgba(23,23,25,0.06)] lg:sticky lg:top-24 lg:self-start">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-[#f58652]">Project notes</p>
           <BodyContent post={post} compact />
         </aside>
-        <div className="columns-1 gap-5 space-y-5 md:columns-2">
+        <div className="grid gap-7 md:grid-cols-2">
           {(images.length ? images : ['/placeholder.svg?height=900&width=1200']).map((image, index) => (
-            <figure key={`${image}-${index}`} className="break-inside-avoid overflow-hidden rounded-[2rem] border border-[var(--editable-border)] bg-white shadow-sm">
-              <img src={image} alt="" className="w-full object-cover" />
-              {index === 0 ? <figcaption className="p-5 text-sm font-bold opacity-65">Featured visual from this image post.</figcaption> : null}
+            <figure key={`${image}-${index}`} className="mk-browser-card overflow-hidden">
+              <div className={index % 3 === 0 ? 'relative aspect-[4/3] overflow-hidden rounded-xl' : 'relative aspect-[16/10] overflow-hidden rounded-xl'}>
+                <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+              </div>
+              {index === 0 ? <figcaption className="pt-5 text-sm font-bold text-[#96989f]">Featured visual from this image post.</figcaption> : null}
             </figure>
           ))}
         </div>
-      </div>
-      <div className="mt-10"><RelatedPanel task="image" post={post} related={related} /></div>
-    </section>
+      </section>
+      <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-8"><RelatedPanel task="image" post={post} related={related} /></section>
+    </>
   )
 }
 
@@ -385,7 +398,7 @@ function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey;
           <div className="mt-4 grid gap-3 text-sm font-bold opacity-75">
             <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4" /> Task: {taskConfig?.label || task}</p>
             <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {SITE_CONFIG.name}</p>
-            {post.publishedAt ? <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p> : null}
+            
           </div>
         </div>
       ) : null}
