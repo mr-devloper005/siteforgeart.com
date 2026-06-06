@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { ArrowRight, CheckCircle2, Images, Sparkles } from 'lucide-react'
 import { buildPageMetadata } from '@/lib/seo'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 import { EditableLocalLoginForm } from '@/editable/components/EditableLocalAuthForms'
@@ -12,17 +13,40 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function LoginPage() {
   return (
     <EditableSiteShell>
-      <main className="bg-[var(--editable-page-bg,#fff7ee)] text-[var(--editable-page-text,#2f1d16)]">
-        <section className="mx-auto grid min-h-[calc(100vh-12rem)] max-w-[var(--editable-container)] items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.28em] opacity-55">{pagesContent.auth.login.badge}</p>
-            <h1 className="mt-5 max-w-xl text-5xl font-black leading-[0.98] tracking-[-0.07em] sm:text-6xl">{pagesContent.auth.login.title}</h1>
-            <p className="mt-6 max-w-lg text-sm leading-8 opacity-70">{pagesContent.auth.login.description}</p>
+      <main className="bg-white text-[#171719]">
+        <section className="grid min-h-[720px] lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="mk-dark-pattern relative flex overflow-hidden px-5 py-16 sm:px-10 lg:px-14 lg:py-20">
+            <span className="mk-drift pointer-events-none absolute left-[12%] top-[16%] h-8 w-8 rounded-full border border-[#f58652]" />
+            <span className="mk-float pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 rounded-full border-[6px] border-[#f58652]/50" />
+            <div className="relative z-10 my-auto max-w-xl">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f58652] text-white shadow-[0_18px_36px_rgba(245,134,82,0.28)]">
+                <Images className="h-7 w-7" />
+              </div>
+              <p className="mt-8 text-xs font-black uppercase tracking-[0.24em] text-[#f58652]">{pagesContent.auth.login.badge}</p>
+              <h1 className="mt-5 text-4xl font-black leading-[1.04] tracking-[-0.05em] text-white sm:text-6xl">{pagesContent.auth.login.title}</h1>
+              <p className="mt-6 max-w-lg text-base leading-8 text-white/62">{pagesContent.auth.login.description}</p>
+              <div className="mt-9 grid gap-3 text-sm font-bold text-white/72">
+                <p className="flex items-center gap-3"><CheckCircle2 className="h-5 w-5 text-[#f58652]" /> Continue managing visual submissions.</p>
+                <p className="flex items-center gap-3"><CheckCircle2 className="h-5 w-5 text-[#f58652]" /> Return to your publishing workspace.</p>
+              </div>
+            </div>
           </div>
-          <div className="rounded-[2rem] border border-[var(--editable-border)] bg-white/80 p-6 shadow-[0_24px_70px_rgba(16,36,31,0.12)] backdrop-blur sm:p-8">
-            <h2 className="text-2xl font-black tracking-[-0.04em]">{pagesContent.auth.login.formTitle}</h2>
-            <EditableLocalLoginForm />
-            <p className="mt-5 text-sm opacity-70">New here? <Link href="/signup" className="font-black underline-offset-4 hover:underline">{pagesContent.auth.login.createCta}</Link></p>
+
+          <div className="flex items-center justify-center px-4 py-16 sm:px-8 lg:px-14">
+            <div className="w-full max-w-xl">
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#f58652]">Welcome back</p>
+              <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] sm:text-5xl">{pagesContent.auth.login.formTitle}</h2>
+              <p className="mt-4 text-base leading-7 text-[#777981]">Enter your account details to continue.</p>
+              <div className="mk-browser-card mt-9 p-4 pt-12 sm:p-7 sm:pt-14">
+                <div className="rounded-2xl bg-white p-6 shadow-[0_20px_48px_rgba(23,23,25,0.07)] sm:p-8">
+                  <EditableLocalLoginForm />
+                  <p className="mt-6 border-t border-[#eeeeee] pt-5 text-sm text-[#777981]">
+                    New here? <Link href="/signup" className="inline-flex items-center gap-1 font-black text-[#171719] hover:text-[#f58652]">{pagesContent.auth.login.createCta} <ArrowRight className="h-4 w-4" /></Link>
+                  </p>
+                </div>
+              </div>
+              <p className="mt-6 flex items-center gap-2 text-xs font-bold text-[#96989f]"><Sparkles className="h-4 w-4 text-[#f58652]" /> Your session stays on this device.</p>
+            </div>
           </div>
         </section>
       </main>
